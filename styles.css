@@ -229,24 +229,6 @@ button {
   transition: opacity 0.3s ease;
 }
 
-.canvas-hero-msg {
-  font-size: 0.98rem;
-  color: #111827;
-  line-height: 1.45;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-
-.canvas-hero-msg strong {
-  font-weight: 750;
-  color: #000000;
-}
-
-.canvas-sub-msg {
-  color: #6b7280;
-  font-size: 0.9rem;
-  margin-top: 2px;
-}
-
 .hadith-pill {
   background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(8px);
@@ -1248,14 +1230,6 @@ button {
   .canvas-note {
     bottom: 12px;
     max-width: 90%;
-  }
-
-  .canvas-hero-msg {
-    font-size: 0.82rem;
-  }
-
-  .canvas-sub-msg {
-    display: none;
   }
 
   .hadith-pill {

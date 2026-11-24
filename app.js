@@ -1360,13 +1360,6 @@
     const sideTitle = $("#sidebarTitle");
     if (sideTitle) sideTitle.textContent = isSq ? "Dhuro" : "Donate";
 
-    const canvasHeroMsg = $("#canvasHeroMsg");
-    if (canvasHeroMsg) {
-      canvasHeroMsg.innerHTML = isSq
-        ? `Ju keni <strong>njëqind milionë dollarë</strong>. Urime.<div class="canvas-sub-msg">Shpenzoni pasurinë tuaj duke dhuruar për kauza fisnike nga menyja anësore.</div>`
-        : `You have <strong>one hundred million dollars</strong>. Congratulations.<div class="canvas-sub-msg">Spend your wealth by donating to noble causes from the sidebar.</div>`;
-    }
-
     if (elements.search) {
       elements.search.placeholder = isSq ? "Kërko kauza..." : "Search causes...";
       elements.search.setAttribute("aria-label", isSq ? "Kërko kauza" : "Search initiatives");
