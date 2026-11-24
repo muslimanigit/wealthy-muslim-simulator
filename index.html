@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#ffffff">
+  <title>The Wealthy Muslim — Impact Simulator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="spend-simulator">
+  <div class="app-layout">
+    <!-- Blank Interactive Canvas Stage -->
+    <main class="canvas-area">
+      <canvas id="stageCanvas"></canvas>
+
+      <!-- Canvas Topbar: Brand, Center Balance & Floating Controls -->
+      <header class="canvas-topbar">
+        <div class="brand">
+          <a href="#" class="brand-link" title="The Wealthy Muslim">
+            <span id="brandText" class="brand-text">THE WEALTHY MUSLIM</span>
+          </a>
+        </div>
+
+        <!-- Center Balance Display -->
+        <div class="balance-overlay" aria-live="polite">
+          <div id="balanceValue" class="balance">$100,000,000 left</div>
+          <div class="spent-row">
+            <span id="spentPie" class="spent-pie" style="--pct: 0;"></span>
+            <span class="spent-label">
+              You've donated <strong id="spentValue">$0</strong> of <span id="startingValue">$100,000,000</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Top Canvas Actions -->
+        <div class="canvas-top-actions">
+          <!-- Center View Button -->
+          <button id="centerBtn" class="canvas-pill-btn" type="button" title="Center camera view" aria-label="Center view">
+            <svg class="btn-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="7"></circle>
+              <line x1="12" y1="2" x2="12" y2="5"></line>
+              <line x1="12" y1="19" x2="12" y2="22"></line>
+              <line x1="2" y1="12" x2="5" y2="12"></line>
+              <line x1="19" y1="12" x2="22" y2="12"></line>
+            </svg>
+            <span>Center</span>
+          </button>
+
+          <!-- Wisdom Button -->
+          <button id="inspirationBtn" class="canvas-pill-btn" type="button" title="Islamic wisdom on wealth & charity">
+            <span>Wisdom</span>
+          </button>
+
+          <!-- Starting Budget Button -->
+          <button id="wealthButton" class="canvas-pill-btn" type="button" title="Change starting wealth">
+            <span class="btn-text-full">Budget</span>
+          </button>
+
+          <!-- Impact Receipt Button -->
+          <button id="receiptButton" class="canvas-pill-btn" type="button" title="View impact receipt">
+            <span class="btn-text-full">Receipt</span>
+          </button>
+
+          <!-- Currency Selector -->
+          <select id="currencySelect" class="canvas-pill-select" aria-label="Currency">
+            <option value="USD">USD ($)</option>
+            <option value="EUR">EUR (€)</option>
+            <option value="GBP">GBP (£)</option>
+          </select>
+
+          <!-- Language Selector -->
+          <select id="langSelect" class="canvas-pill-select lang-select" aria-label="Language / Gjuha" title="Zgjidhni gjuhën / Select language">
+            <option value="en">EN</option>
+            <option value="sq">SQ</option>
+          </select>
+        </div>
+      </header>
+
+      <!-- Bottom Hero & Islamic Guidance Banner -->
+      <div id="canvasNote" class="canvas-note">
+        <div id="canvasHeroMsg" class="canvas-hero-msg">
+          You have <strong>one hundred million dollars</strong>. Congratulations.
+          <div class="canvas-sub-msg">Spend your wealth by donating to noble causes from the sidebar.</div>
+        </div>
+        <div class="hadith-pill">
+          <span class="arabic-snippet" dir="rtl">«نِعْمَ الْمَالُ الصَّالِحُ لِلْمَرْءِ الصَّالِحِ»</span>
+          <span id="hadithText" class="hadith-text">“How excellent is pure wealth in the hands of a righteous person!”</span>
+          <span id="hadithRef" class="hadith-ref">— Prophet Muhammad ﷺ</span>
+        </div>
+        <p id="duaNote" class="dua-note">May Allah make it possible for you, expand your halal provision, and accept your charity.</p>
+      </div>
+
+      <!-- Canvas Zoom Controls (+ / -) -->
+      <div class="zoom-controls" aria-label="Zoom controls">
+        <button id="zoomInBtn" type="button" aria-label="Zoom in" title="Zoom in">+</button>
+        <div class="zoom-divider"></div>
+        <button id="zoomOutBtn" type="button" aria-label="Zoom out" title="Zoom out">−</button>
+      </div>
+
+      <!-- Canvas Hover Tooltip -->
+      <div id="canvasTooltip" class="canvas-tooltip" aria-hidden="true"></div>
+    </main>
+
+    <!-- Right Sidebar: Initiatives Choice List -->
+    <aside class="sidebar">
+      <!-- Sidebar Header -->
+      <div class="sidebar-head">
+        <div class="sidebar-title-row">
+          <h2 id="sidebarTitle" class="sidebar-title">Donate</h2>
+          <div class="sidebar-head-right">
+            <span id="catalogCount" class="sidebar-sub">271 causes</span>
+            <button id="resetButton" class="reset-icon-btn" type="button" aria-label="Restart simulation" title="Restart from scratch">
+              <svg class="reset-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 4v6h-6"></path>
+                <path d="M1 20v-6h6"></path>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick Search -->
+        <div class="search-wrapper">
+          <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input id="searchInput" type="search" placeholder="Search causes..." autocomplete="off" aria-label="Search initiatives">
+        </div>
+
+        <!-- Category Filter Pills -->
+        <nav id="categoryNav" class="category-pills" aria-label="Categories"></nav>
+      </div>
+
+      <!-- Items Scroll List -->
+      <div id="catalog" class="items-list" role="feed" aria-label="Initiatives list"></div>
+    </aside>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- Floating Particle Layer -->
+  <div id="particleLayer" class="particle-layer" aria-hidden="true"></div>
+
+  <!-- Islamic Wisdom & Ayahs Dialog -->
+  <dialog id="inspirationDialog" class="dialog inspiration-dialog">
+    <div class="dialog-head">
+      <div>
+        <p class="dialog-kicker">Islamic Guidance</p>
+        <h2 class="dialog-title">The Value of Wealth in Islam</h2>
+      </div>
+      <button id="closeInspiration" class="dialog-close" aria-label="Close" type="button">×</button>
+    </div>
+    <div class="inspiration-content">
+      <!-- Ayah 1 -->
+      <article class="wisdom-card">
+        <div class="arabic-verse" dir="rtl">
+          مَّثَلُ الَّذِينَ يُنفِقُونَ أَمْوَالَهُمْ فِي سَبِيلِ اللَّهِ كَمَثَلِ حَبَّةٍ أَنبَتَتْ سَبْعَ سَنَابِلَ فِي كُلِّ سُنبُلَةٍ مِّائَةُ حَبَّةٍ ۗ وَاللَّهُ يُضَاعِفُ لِمَن يَشَاءُ
+        </div>
+        <p class="wisdom-translation">
+          “The example of those who spend their wealth in the way of Allah is like a seed of grain which grows seven spikes; in each spike is a hundred grains. And Allah multiplies [His reward] for whom He wills.”
+        </p>
+        <span class="wisdom-source">— Surah Al-Baqarah (2:261)</span>
+      </article>
+
+      <!-- Hadith 1 -->
+      <article class="wisdom-card">
+        <div class="arabic-verse" dir="rtl">
+          «نِعْمَ الْمَالُ الصَّالِحُ لِلْمَرْءِ الصَّالِحِ»
+        </div>
+        <p class="wisdom-translation">
+          “How excellent is pure, righteous wealth in the hands of a righteous person!”
+        </p>
+        <span class="wisdom-source">— Prophet Muhammad ﷺ (Al-Adab Al-Mufrad, Sahih)</span>
+      </article>
+
+      <!-- Hadith 2 -->
+      <article class="wisdom-card">
+        <div class="arabic-verse" dir="rtl">
+          «لَا حَسَدَ إِلَّا فِي اثْنَتَيْنِ: رَجُلٌ آتَاهُ اللَّهُ مَالًا فَسَلَّطَهُ عَلَى هَلَكَتِهِ فِي الْحَقِّ...»
+        </div>
+        <p class="wisdom-translation">
+          “There is no legitimate envy except in two cases: a person upon whom Allah has bestowed wealth and he spends it rightfully in the cause of truth, and a person upon whom Allah has bestowed wisdom and he judges by it and teaches it.”
+        </p>
+        <span class="wisdom-source">— Sahih al-Bukhari &amp; Sahih Muslim</span>
+      </article>
+
+      <!-- Hadith 3 -->
+      <article class="wisdom-card">
+        <div class="arabic-verse" dir="rtl">
+          «مَا نَقَصَتْ صَدَقَةٌ مِنْ مَالٍ»
+        </div>
+        <p class="wisdom-translation">
+          “Charity does not decrease wealth in the slightest.”
+        </p>
+        <span class="wisdom-source">— Sahih Muslim (2588)</span>
+      </article>
+
+      <!-- Heartfelt Dua -->
+      <div class="dua-box">
+        <div class="dua-title">✨ A Prayer for Your Legacy</div>
+        <p>
+          May Allah make it possible for you, expand your halal provision, grant you sincerity in every action, and make your wealth a means of eternal benefit, enduring light, and continuous Sadaqah Jariyah for you and the Ummah. Ameen.
+        </p>
+      </div>
+    </div>
+    <div class="dialog-actions">
+      <button id="closeInspirationBottom" class="primary-button" type="button">Alhamdulillah</button>
+    </div>
+  </dialog>
+
+  <!-- Starting Wealth Dialog -->
+  <dialog id="wealthDialog" class="dialog">
+    <form id="wealthForm" method="dialog">
+      <div class="dialog-head">
+        <div>
+          <p class="dialog-kicker">Hypothetical Budget</p>
+          <h2 class="dialog-title">Choose starting wealth</h2>
+        </div>
+        <button class="dialog-close" value="cancel" aria-label="Close" type="button">×</button>
+      </div>
+      <div id="wealthPresets" class="wealth-presets"></div>
+      <label class="custom-field">
+        <span>Custom amount</span>
+        <input id="customWealth" type="number" min="1" step="1" placeholder="Enter amount">
+      </label>
+      <div class="dialog-actions">
+        <button class="secondary-button" value="cancel" type="button">Cancel</button>
+        <button class="primary-button" value="confirm" type="submit">Apply wealth</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Impact Receipt Dialog -->
+  <dialog id="receiptDialog" class="dialog receipt-dialog">
+    <div class="dialog-head">
+      <div>
+        <p class="dialog-kicker">Hypothetical Impact</p>
+        <h2 class="dialog-title">Your impact receipt</h2>
+      </div>
+      <button id="closeReceipt" class="dialog-close" aria-label="Close" type="button">×</button>
+    </div>
+    <div id="receiptContent" class="receipt-scroll"></div>
+    <div class="dialog-actions">
+      <button id="copySummary" class="secondary-button" type="button">Copy summary</button>
+      <button id="closeReceiptBottom" class="primary-button" type="button">Done</button>
+    </div>
+  </dialog>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
