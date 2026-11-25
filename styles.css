@@ -210,6 +210,199 @@ button {
   cursor: grabbing;
 }
 
+/* Canvas Stage Overview (Empty State) */
+.canvas-intro {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(680px, calc(100% - 48px));
+  max-height: calc(100% - 210px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 12px 36px rgba(15, 23, 42, 0.08);
+  padding: 22px 24px 18px;
+  z-index: 12;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.canvas-intro.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -48%) scale(0.98);
+  visibility: hidden;
+}
+
+.canvas-intro-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.canvas-intro-kicker {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--green-soft);
+  color: var(--green-dark);
+  border: 1px solid #a7f3d0;
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.canvas-intro-close {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #64748b;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  font-size: 1.25rem;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.canvas-intro-close:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.canvas-intro-title {
+  font-size: clamp(1.08rem, 1.8vw, 1.32rem);
+  font-weight: 800;
+  line-height: 1.32;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+
+.canvas-intro-desc {
+  font-size: 0.87rem;
+  line-height: 1.52;
+  color: #475569;
+  margin-bottom: 14px;
+}
+
+.canvas-intro-desc strong {
+  color: #0f172a;
+}
+
+.canvas-scenarios {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.canvas-scenario-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 10px 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.canvas-scenario-btn:hover {
+  background: var(--green-soft);
+  border-color: #6ee7b7;
+  transform: translateY(-1px);
+}
+
+.scenario-amount {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--green-dark);
+  font-variant-numeric: tabular-nums;
+}
+
+.scenario-label {
+  font-size: 0.77rem;
+  font-weight: 600;
+  color: #334155;
+  line-height: 1.3;
+}
+
+.canvas-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  padding: 10px 0;
+  border-top: 1px solid #f1f5f9;
+  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 10px;
+}
+
+.canvas-step {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #475569;
+  line-height: 1.25;
+}
+
+.step-num {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #0f172a;
+  font-size: 0.68rem;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.canvas-intro-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.canvas-intro-disclaimer {
+  font-size: 0.73rem;
+  color: #64748b;
+  line-height: 1.4;
+  flex: 1;
+  min-width: 220px;
+}
+
+.canvas-intro-link {
+  background: none;
+  border: none;
+  color: var(--green-dark);
+  font-size: 0.76rem;
+  font-weight: 750;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.15s ease;
+  white-space: nowrap;
+}
+
+.canvas-intro-link:hover {
+  background: var(--green-soft);
+}
+
 /* Bottom Hero & Islamic Guidance Banner */
 .canvas-note {
   position: absolute;
@@ -219,14 +412,51 @@ button {
   text-align: center;
   pointer-events: none;
   user-select: none;
-  max-width: 680px;
-  width: calc(100% - 48px);
+  max-width: 720px;
+  width: calc(100% - 120px);
   z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   transition: opacity 0.3s ease;
+}
+
+.canvas-note-meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.74rem;
+  color: #64748b;
+}
+
+.canvas-tagline {
+  font-style: italic;
+  color: #64748b;
+}
+
+.canvas-meta-btn {
+  pointer-events: auto;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 0.72rem;
+  font-weight: 650;
+  color: #0f172a;
+  transition: all 0.15s ease;
+}
+
+.canvas-meta-btn:hover {
+  background: var(--green-soft);
+  border-color: #a7f3d0;
+  color: var(--green-dark);
+}
+
+.canvas-meta-btn.is-hidden {
+  display: none;
 }
 
 .hadith-pill {
@@ -920,6 +1150,100 @@ button {
   width: min(600px, calc(100vw - 32px));
 }
 
+.about-dialog {
+  width: min(660px, calc(100vw - 32px));
+}
+
+.about-content {
+  max-height: 58vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 18px;
+  padding-right: 4px;
+  scrollbar-width: thin;
+}
+
+.about-section {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.about-section h3 {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.about-section p {
+  font-size: 0.84rem;
+  line-height: 1.52;
+  color: #334155;
+}
+
+.about-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.about-pill {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  font-size: 0.75rem;
+  font-weight: 650;
+  color: #0f172a;
+}
+
+.about-list {
+  margin-top: 6px;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #334155;
+}
+
+.about-refs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.about-ref-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--green-soft);
+  border: 1px solid #a7f3d0;
+  color: var(--green-dark);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.about-ref-link:hover {
+  background: #d1fae5;
+}
+
+.about-repo-link {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
 .inspiration-content {
   max-height: 56vh;
   overflow-y: auto;
@@ -1228,8 +1552,52 @@ button {
   }
 
   .canvas-note {
-    bottom: 12px;
+    bottom: 10px;
+    width: calc(100% - 92px);
     max-width: 90%;
+    gap: 4px;
+  }
+
+  .canvas-intro {
+    width: calc(100% - 24px);
+    max-height: calc(100% - 122px);
+    padding: 12px 14px;
+    border-radius: 12px;
+  }
+
+  .canvas-intro-title {
+    font-size: 0.94rem;
+    margin-bottom: 6px;
+  }
+
+  .canvas-intro-desc {
+    font-size: 0.78rem;
+    margin-bottom: 10px;
+  }
+
+  .canvas-scenarios {
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .canvas-scenario-btn {
+    padding: 7px 9px;
+  }
+
+  .scenario-amount {
+    font-size: 0.8rem;
+  }
+
+  .scenario-label {
+    font-size: 0.7rem;
+  }
+
+  .canvas-steps {
+    display: none;
+  }
+
+  .canvas-note-meta {
+    display: none;
   }
 
   .hadith-pill {

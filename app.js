@@ -1226,6 +1226,16 @@
     zoomInBtn: $("#zoomInBtn"),
     zoomOutBtn: $("#zoomOutBtn"),
     canvasNote: $("#canvasNote"),
+    canvasIntro: $("#canvasIntro"),
+    dismissIntroBtn: $("#dismissIntroBtn"),
+    openAboutFromIntro: $("#openAboutFromIntro"),
+    introScenarios: $("#introScenarios"),
+    aboutBtn: $("#aboutBtn"),
+    showIntroBtn: $("#showIntroBtn"),
+    aboutDialog: $("#aboutDialog"),
+    aboutContent: $("#aboutContent"),
+    closeAbout: $("#closeAbout"),
+    closeAboutBottom: $("#closeAboutBottom"),
     tooltip: $("#canvasTooltip"),
     catalog: $("#catalog"),
     count: $("#catalogCount"),
@@ -1243,6 +1253,21 @@
 
   let tweenFrame = null;
   let displayedBalance = state.startingWealth - totalDonated();
+  let introDismissed = false;
+
+  function hasAnyDonations() {
+    return Object.values(state.donations).some(count => count > 0);
+  }
+
+  function updateCanvasIntroVisibility() {
+    const donated = hasAnyDonations();
+    if (elements.canvasIntro) {
+      elements.canvasIntro.classList.toggle("is-hidden", donated || introDismissed);
+    }
+    if (elements.showIntroBtn) {
+      elements.showIntroBtn.classList.toggle("is-hidden", donated || !introDismissed);
+    }
+  }
 
   function tweenBalance() {
     cancelAnimationFrame(tweenFrame);
@@ -1339,8 +1364,12 @@
   function renderStaticTexts() {
     const isSq = state.lang === "sq";
 
+    document.title = isSq
+      ? "Muslimani i Pasur — Simuluesi i Pasurisë dhe Ndikimit Islam"
+      : "The Wealthy Muslim — Islamic Wealth & Impact Simulator";
+
     const brand = $("#brandText");
-    if (brand) brand.textContent = isSq ? "MULIMANI I PASUR" : "THE WEALTHY MUSLIM";
+    if (brand) brand.textContent = isSq ? "MUSLIMANI I PASUR" : "THE WEALTHY MUSLIM";
 
     const centerBtnSpan = $("#centerBtn span");
     if (centerBtnSpan) centerBtnSpan.textContent = isSq ? "Qendro" : "Center";
@@ -1456,6 +1485,208 @@
 
     const closeReceiptBottom = $("#closeReceiptBottom");
     if (closeReceiptBottom) closeReceiptBottom.textContent = isSq ? "Përfundo" : "Done";
+
+    renderCanvasIntro();
+    renderAboutContent();
+  }
+
+  function renderCanvasIntro() {
+    const isSq = state.lang === "sq";
+    const sym = getCurrencySymbol();
+
+    const introKicker = $("#introKicker");
+    if (introKicker) {
+      introKicker.textContent = isSq
+        ? "Simuluesi i Pasurisë dhe Ndikimit Islam"
+        : "Islamic Wealth & Impact Simulator";
+    }
+
+    const dismissBtn = elements.dismissIntroBtn;
+    if (dismissBtn) {
+      const label = isSq ? "Fshih përmbledhjen" : "Hide overview";
+      dismissBtn.setAttribute("aria-label", label);
+      dismissBtn.title = label;
+    }
+
+    const introTitle = $("#introTitle");
+    if (introTitle) {
+      introTitle.textContent = isSq
+        ? "Po sikur ta masnim pasurinë jo vetëm me atë që mund të blini për vete, por edhe me sa mirësi mund të sillni në botë?"
+        : "What if you measured wealth not only by what you could buy for yourself, but also by how much good you could bring into the world?";
+    }
+
+    const introDesc = $("#introDesc");
+    if (introDesc) {
+      introDesc.innerHTML = isSq
+        ? "<strong>Pasuria është një mundësi për të krijuar ndikim.</strong> Drejtoni pasuri hipotetike drejt davet-it, dijes së saktë islame, shpërndarjes së Kuranit, mbështetjes së myslimanëve të rinj, ujit të pastër, ushqimit, jetimëve, shëndetësisë, arsimit dhe nismave të përhershme <strong>Sadaka Rrjedhëse (Jariyah)</strong> dhe <strong>Vakëf</strong>."
+        : "<strong>Wealth is an opportunity to create impact.</strong> Direct hypothetical wealth toward Dawah, authentic Islamic knowledge, Quran distribution, new Muslims, clean water, food, orphan care, healthcare, education, and lasting <strong>Sadaqah Jariyah</strong> &amp; <strong>Waqf</strong> initiatives.";
+    }
+
+    if (elements.introScenarios) {
+      const scenarios = [
+        {
+          budget: 100000,
+          category: "All",
+          amount: `${sym}100,000`,
+          label: isSq ? "Çfarë mund të arrinit?" : "What could you accomplish?"
+        },
+        {
+          budget: 1000000,
+          category: "Quran and Islamic Knowledge",
+          amount: `${sym}1M`,
+          label: isSq ? "Sa Kurana mund të shpërndanit?" : "How many Qurans could you distribute?"
+        },
+        {
+          budget: 10000000,
+          category: "Water",
+          amount: `${sym}10M`,
+          label: isSq ? "Sa puse uji mund të ndërtonit?" : "How many water wells could you establish?"
+        },
+        {
+          budget: 100000000,
+          category: "Islamic Education",
+          amount: `${sym}100M`,
+          label: isSq ? "Infrastrukturë e arsimit islam" : "Support Islamic educational infrastructure"
+        }
+      ];
+
+      elements.introScenarios.innerHTML = scenarios.map(s => `
+        <button type="button" class="canvas-scenario-btn" data-budget="${s.budget}" data-category="${s.category}">
+          <span class="scenario-amount">${s.amount}</span>
+          <span class="scenario-label">${s.label}</span>
+        </button>
+      `).join("");
+    }
+
+    const introSteps = $("#introSteps");
+    if (introSteps) {
+      const steps = isSq
+        ? [
+          "Zgjidhni pasurinë fillestare",
+          `Alokoni në ${PROJECTS.length} kauza`,
+          "Personalizoni kostot lokale",
+          "Shikoni faturën e ndikimit"
+        ]
+        : [
+          "Choose starting wealth",
+          `Allocate to ${PROJECTS.length} causes`,
+          "Customize cost estimates",
+          "Review impact receipt"
+        ];
+      introSteps.innerHTML = steps.map((text, idx) => `
+        <div class="canvas-step"><span class="step-num">${idx + 1}</span><span class="step-text">${text}</span></div>
+      `).join("");
+    }
+
+    const introDisclaimer = $("#introDisclaimer");
+    if (introDisclaimer) {
+      introDisclaimer.textContent = isSq
+        ? "Të gjitha alokimet janë hipotetike me vlerësime ilustruese të kostos — nuk kryhen dhurime reale dhe nuk jepen vendime fetare apo llogaritje Zekati."
+        : "All allocations are hypothetical using illustrative cost estimates — no real donations, not a Zakat ruling.";
+    }
+
+    if (elements.openAboutFromIntro) {
+      elements.openAboutFromIntro.textContent = isSq ? "Parimet & Udhëzuesi" : "Principles & Guide";
+    }
+
+    const taglineNote = $("#taglineNote");
+    if (taglineNote) {
+      taglineNote.textContent = isSq
+        ? "Eksploroni pasurinë tuaj. Zbuloni mundësitë. Imagjinoni ndikimin."
+        : "Explore your wealth. Discover the possibilities. Imagine the impact.";
+    }
+
+    if (elements.aboutBtn) {
+      elements.aboutBtn.textContent = isSq ? "Parimet & Rreth Projektit" : "Principles & About";
+    }
+
+    if (elements.showIntroBtn) {
+      elements.showIntroBtn.textContent = isSq ? "Shfaq përmbledhjen" : "Show overview";
+    }
+  }
+
+  function renderAboutContent() {
+    const isSq = state.lang === "sq";
+
+    const aboutKicker = $("#aboutDialog .dialog-kicker");
+    if (aboutKicker) aboutKicker.textContent = isSq ? "Përmbledhja e Projektit" : "Project Overview";
+
+    const aboutTitle = $("#aboutDialog .dialog-title");
+    if (aboutTitle) aboutTitle.textContent = isSq ? "Rreth Simuluesit & Parimet Udhëzuese" : "About & Guiding Principles";
+
+    const aboutRepoLink = $("#aboutRepoLink");
+    if (aboutRepoLink) aboutRepoLink.textContent = isSq ? "Depoja në GitHub" : "GitHub Repository";
+
+    const closeAboutBottom = $("#closeAboutBottom");
+    if (closeAboutBottom) closeAboutBottom.textContent = isSq ? "Mbyll" : "Close";
+
+    if (!elements.aboutContent) return;
+
+    const principles = isSq
+      ? ["Sadakaja", "Sadaka Rrjedhëse (Jariyah)", "Vakëfi (Waqf)", "Ihsani", "Rahma", "Dija e Dobishme", "Dinjiteti Njerëzor", "Sinqeriteti", "Urtësia në Davet"]
+      : ["Sadaqah", "Sadaqah Jariyah", "Waqf", "Ihsan", "Rahmah", "Beneficial Knowledge", "Human Dignity", "Sincerity", "Wisdom in Dawah"];
+
+    const quranRefs = [
+      { ref: isSq ? "Kurani 2:261 — Shembulli i shpenzimit" : "Quran 2:261 — Multiplying charity", url: "https://quran.com/2/261" },
+      { ref: isSq ? "Kurani 2:177 — Mirësia dhe dhënia" : "Quran 2:177 — Righteousness & giving", url: "https://quran.com/2/177" },
+      { ref: isSq ? "Kurani 2:215 — Kujt i jepet sadakaja" : "Quran 2:215 — Charitable expenditure", url: "https://quran.com/2/215" },
+      { ref: isSq ? "Kurani 2:262 — Pa përbuzje e lëndim" : "Quran 2:262 — Giving without reproach", url: "https://quran.com/2/262" },
+      { ref: isSq ? "Kurani 2:267 — Dhënia nga të mirat" : "Quran 2:267 — Giving from good things", url: "https://quran.com/2/267" },
+      { ref: isSq ? "Kurani 9:60 — Kategoritë e Zekatit" : "Quran 9:60 — Zakat categories", url: "https://quran.com/9/60" },
+      { ref: isSq ? "Kurani 76:8–9 — Ushqimi për hir të Allahut" : "Quran 76:8–9 — Feeding those in need", url: "https://quran.com/76/8-9" }
+    ];
+
+    elements.aboutContent.innerHTML = isSq
+      ? `
+        <section class="about-section">
+          <h3>Pse ekziston ky projekt</h3>
+          <p><strong>Muslimani i Pasur</strong> është një simulues edukativ dhe interaktiv që ju ndihmon të vizualizoni ndikimin social, humanitar dhe islam të burimeve financiare — përtej konsumit personal, drejt davet-it, dijes së dobishme, arsimit, ujit të pastër, ndihmës humanitare dhe nismave të përhershme të Vakëfit.</p>
+        </section>
+        <section class="about-section">
+          <h3>Vlerat dhe Parimet Islame</h3>
+          <p>Projekti frymëzohet nga mësimet islame mbi bujarinë, dhembshurinë dhe përgjegjësinë shoqërore:</p>
+          <div class="about-pills">${principles.map(p => `<span class="about-pill">${p}</span>`).join("")}</div>
+        </section>
+        <section class="about-section">
+          <h3>Referenca Kuranore</h3>
+          <p>Mësimet kuranore mbi bujarinë dhe ndihmën ndaj të tjerëve:</p>
+          <div class="about-refs">${quranRefs.map(r => `<a class="about-ref-link" href="${r.url}" target="_blank" rel="noopener noreferrer">${r.ref}</a>`).join("")}</div>
+        </section>
+        <section class="about-section">
+          <h3>Filozofia dhe Saktësia</h3>
+          <ul class="about-list">
+            <li>Kostot e shfaqura janë vlerësime ilustruese dhe ndryshojnë sipas vendit, organizatës dhe shkallës.</li>
+            <li>Alokimet e simuluara janë hipotetike — faqja nuk mbledh para dhe nuk proceson dhurime reale.</li>
+            <li>Ndihma humanitare nuk duhet të kushtëzohet kurrë me konvertim fetar.</li>
+            <li>Ky simulues është mjet edukativ eksplorimi, jo sistem llogaritjeje i Zekatit apo fetva fetare.</li>
+          </ul>
+        </section>
+      `
+      : `
+        <section class="about-section">
+          <h3>Why This Project Exists</h3>
+          <p><strong>The Wealthy Muslim</strong> is an educational and interactive simulator built around a simple question: <em>If you had significant financial resources, how much good could you potentially accomplish?</em> It makes charitable possibilities tangible across Dawah, Islamic knowledge, clean water, food, orphan care, healthcare, education, housing, and long-term Waqf endowments.</p>
+        </section>
+        <section class="about-section">
+          <h3>Islamic Values &amp; Principles</h3>
+          <p>The simulator draws inspiration from Islamic teachings on generosity, beneficial knowledge, and social responsibility:</p>
+          <div class="about-pills">${principles.map(p => `<span class="about-pill">${p}</span>`).join("")}</div>
+        </section>
+        <section class="about-section">
+          <h3>Relevant Quranic References</h3>
+          <p>Explore broader Quranic teachings on generosity, charity, and helping those in need:</p>
+          <div class="about-refs">${quranRefs.map(r => `<a class="about-ref-link" href="${r.url}" target="_blank" rel="noopener noreferrer">${r.ref}</a>`).join("")}</div>
+        </section>
+        <section class="about-section">
+          <h3>Project Philosophy &amp; Accuracy</h3>
+          <ul class="about-list">
+            <li>All displayed project costs are illustrative estimates that vary by geography, organization, and scale.</li>
+            <li>Simulated allocations are hypothetical — the simulator does not collect money or process real donations.</li>
+            <li>Humanitarian assistance should never be conditional on religious conversion.</li>
+            <li>This tool is for educational exploration, not a Zakat calculation system or religious ruling.</li>
+          </ul>
+        </section>
+      `;
   }
 
   // ============================================================
@@ -1574,6 +1805,7 @@
     persist();
     tweenBalance();
     renderCatalog();
+    updateCanvasIntroVisibility();
 
     if (triggerElement) {
       burstDonationParticles(triggerElement);
@@ -1600,6 +1832,7 @@
     persist();
     tweenBalance();
     renderCatalog();
+    updateCanvasIntroVisibility();
 
     stage.syncDonations(state.donations);
   }
@@ -1623,11 +1856,13 @@
     state.donations = {};
     state.customPrices = {};
     state.editingPriceId = null;
+    introDismissed = false;
     displayedBalance = state.startingWealth;
 
     persist();
     renderBalance();
     renderCatalog();
+    updateCanvasIntroVisibility();
     stage.syncDonations(state.donations);
     stage.recenter();
 
@@ -1775,6 +2010,7 @@
     persist();
     renderBalance();
     renderCatalog();
+    renderCanvasIntro();
   });
 
   // Language select (English / Shqip)
@@ -1814,6 +2050,70 @@
     });
     $("#closeInspiration").addEventListener("click", () => inspirationDialog.close());
     $("#closeInspirationBottom").addEventListener("click", () => inspirationDialog.close());
+  }
+
+  // Canvas Intro & About Dialog wiring
+  if (elements.dismissIntroBtn) {
+    elements.dismissIntroBtn.addEventListener("click", () => {
+      introDismissed = true;
+      updateCanvasIntroVisibility();
+    });
+  }
+
+  if (elements.showIntroBtn) {
+    elements.showIntroBtn.addEventListener("click", () => {
+      introDismissed = false;
+      updateCanvasIntroVisibility();
+    });
+  }
+
+  if (elements.introScenarios) {
+    elements.introScenarios.addEventListener("click", (e) => {
+      const btn = e.target.closest(".canvas-scenario-btn");
+      if (!btn) return;
+      const budget = Number(btn.dataset.budget);
+      const category = btn.dataset.category || "All";
+      if (!budget) return;
+
+      state.startingWealth = budget;
+      state.selectedCategory = category;
+      state.searchQuery = "";
+      if (elements.search) elements.search.value = "";
+      displayedBalance = remainingBalance();
+
+      persist();
+      renderBalance();
+      buildCategories();
+      renderCatalog();
+
+      const isSq = state.lang === "sq";
+      const catLabel = getCategoryName(category);
+      toast(
+        isSq
+          ? `Buxheti u vendos në ${formatMoney(budget)} • Kategoria: ${catLabel}`
+          : `Budget set to ${formatMoney(budget)} • Category: ${catLabel}`
+      );
+    });
+  }
+
+  const openAboutDialog = () => {
+    if (elements.aboutDialog) {
+      renderAboutContent();
+      elements.aboutDialog.showModal();
+    }
+  };
+
+  if (elements.aboutBtn) {
+    elements.aboutBtn.addEventListener("click", openAboutDialog);
+  }
+  if (elements.openAboutFromIntro) {
+    elements.openAboutFromIntro.addEventListener("click", openAboutDialog);
+  }
+  if (elements.closeAbout && elements.aboutDialog) {
+    elements.closeAbout.addEventListener("click", () => elements.aboutDialog.close());
+  }
+  if (elements.closeAboutBottom && elements.aboutDialog) {
+    elements.closeAboutBottom.addEventListener("click", () => elements.aboutDialog.close());
   }
 
   // ============================================================
@@ -1982,5 +2282,6 @@
   buildCategories();
   renderBalance();
   renderCatalog();
+  updateCanvasIntroVisibility();
   elements.currency.value = state.currency;
 })();

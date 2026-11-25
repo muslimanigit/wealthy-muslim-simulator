@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#ffffff">
-  <title>The Wealthy Muslim — Impact Simulator</title>
+  <title>The Wealthy Muslim — Islamic Wealth &amp; Impact Simulator</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body class="spend-simulator">
@@ -76,6 +76,55 @@
         </div>
       </header>
 
+      <!-- Canvas Stage Overview (Shown before first donation) -->
+      <section id="canvasIntro" class="canvas-intro" aria-label="Simulator overview">
+        <div class="canvas-intro-head">
+          <span id="introKicker" class="canvas-intro-kicker">Islamic Wealth &amp; Impact Simulator</span>
+          <button id="dismissIntroBtn" class="canvas-intro-close" type="button" aria-label="Hide overview" title="Hide overview">×</button>
+        </div>
+
+        <h1 id="introTitle" class="canvas-intro-title">
+          What if you measured wealth not only by what you could buy for yourself, but also by how much good you could bring into the world?
+        </h1>
+
+        <p id="introDesc" class="canvas-intro-desc">
+          <strong>Wealth is an opportunity to create impact.</strong> Direct hypothetical wealth toward Dawah, authentic Islamic knowledge, Quran distribution, new Muslims, clean water, food, orphan care, healthcare, education, and lasting Sadaqah Jariyah &amp; Waqf initiatives.
+        </p>
+
+        <div id="introScenarios" class="canvas-scenarios" aria-label="Explore example scenarios">
+          <button type="button" class="canvas-scenario-btn" data-budget="100000" data-category="All">
+            <span class="scenario-amount">$100,000</span>
+            <span class="scenario-label">What could you accomplish?</span>
+          </button>
+          <button type="button" class="canvas-scenario-btn" data-budget="1000000" data-category="Quran and Islamic Knowledge">
+            <span class="scenario-amount">$1M</span>
+            <span class="scenario-label">How many Qurans could you distribute?</span>
+          </button>
+          <button type="button" class="canvas-scenario-btn" data-budget="10000000" data-category="Water">
+            <span class="scenario-amount">$10M</span>
+            <span class="scenario-label">How many water wells could you establish?</span>
+          </button>
+          <button type="button" class="canvas-scenario-btn" data-budget="100000000" data-category="Islamic Education">
+            <span class="scenario-amount">$100M</span>
+            <span class="scenario-label">Support Islamic educational infrastructure</span>
+          </button>
+        </div>
+
+        <div id="introSteps" class="canvas-steps">
+          <div class="canvas-step"><span class="step-num">1</span><span class="step-text">Choose starting wealth</span></div>
+          <div class="canvas-step"><span class="step-num">2</span><span class="step-text">Allocate to 271 causes</span></div>
+          <div class="canvas-step"><span class="step-num">3</span><span class="step-text">Customize cost estimates</span></div>
+          <div class="canvas-step"><span class="step-num">4</span><span class="step-text">Review impact receipt</span></div>
+        </div>
+
+        <div class="canvas-intro-footer">
+          <p id="introDisclaimer" class="canvas-intro-disclaimer">
+            All allocations are hypothetical using illustrative cost estimates — no real donations, not a Zakat ruling.
+          </p>
+          <button id="openAboutFromIntro" class="canvas-intro-link" type="button">Principles &amp; Guide</button>
+        </div>
+      </section>
+
       <!-- Bottom Hero & Islamic Guidance Banner -->
       <div id="canvasNote" class="canvas-note">
         <div class="hadith-pill">
@@ -84,6 +133,11 @@
           <span id="hadithRef" class="hadith-ref">— Prophet Muhammad ﷺ</span>
         </div>
         <p id="duaNote" class="dua-note">May Allah make it possible for you, expand your halal provision, and accept your charity.</p>
+        <div class="canvas-note-meta">
+          <span id="taglineNote" class="canvas-tagline">Explore your wealth. Discover the possibilities. Imagine the impact.</span>
+          <button id="aboutBtn" class="canvas-meta-btn" type="button">Principles &amp; About</button>
+          <button id="showIntroBtn" class="canvas-meta-btn is-hidden" type="button">Show overview</button>
+        </div>
       </div>
 
       <!-- Canvas Zoom Controls (+ / -) -->
@@ -203,6 +257,22 @@
     </div>
     <div class="dialog-actions">
       <button id="closeInspirationBottom" class="primary-button" type="button">Alhamdulillah</button>
+    </div>
+  </dialog>
+
+  <!-- About, Islamic Values & Project Philosophy Dialog -->
+  <dialog id="aboutDialog" class="dialog about-dialog">
+    <div class="dialog-head">
+      <div>
+        <p class="dialog-kicker">Project Overview</p>
+        <h2 class="dialog-title">About &amp; Guiding Principles</h2>
+      </div>
+      <button id="closeAbout" class="dialog-close" aria-label="Close" type="button">×</button>
+    </div>
+    <div id="aboutContent" class="about-content"></div>
+    <div class="dialog-actions">
+      <a id="aboutRepoLink" class="secondary-button about-repo-link" href="https://github.com/muslimanigit/wealthy-muslim-simulator" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+      <button id="closeAboutBottom" class="primary-button" type="button">Close</button>
     </div>
   </dialog>
 
