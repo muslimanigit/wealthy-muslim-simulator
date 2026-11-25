@@ -515,5 +515,3 @@ Islamic charity, Muslim charity simulator, Islamic wealth simulator, charitable 
 ---
 
 **The Wealthy Muslim**
-
-*Explore your wealth. Discover the possibilities. Imagine the impact.*
